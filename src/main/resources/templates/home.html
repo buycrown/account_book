@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>최형석_한양사이버대학교</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #e8e9e8;
+        }
+        form, .search-section, #MonthSearch {
+            width: 80%;
+            max-width: 600px;
+            margin: 10px auto; /* 가로 중앙 정렬 */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 5px 10px; /* td 간격을 조정 */
+        }
+        td:first-child {
+            width: 100px; /* 첫 번째 열의 고정 너비 설정 */
+            padding-right: 5px; /* 간격을 50% 축소하여 5px로 설정 */
+            text-align: right; /* 텍스트를 오른쪽 정렬 */
+        }
+        td:nth-child(2) {
+            text-align: left; /* 텍스트를 왼쪽 정렬 */
+        }
+        button[type="submit"] {
+            display: block;
+            margin: 20px auto 0; /* 가운데 정렬 */
+            width: 30%; /* 가로 사이즈를 70% 축소하여 30%로 설정 */
+            height: 45px; /* 높이값을 현재 높이에서 50% 확장하여 45px로 설정 */
+        }
+        .search-section {
+            margin-top: 20px;
+            border-top: 2px solid #ccc; /* 경계선 추가 */
+            padding-top: 10px; /* 경계선과 텍스트 사이 간격 추가 */
+        }
+        .search-section table {
+            width: auto;
+            margin: 0 auto; /* 테이블 가운데 정렬 */
+        }
+        .search-section td {
+            padding: 0 10px; /* td 간격을 설정 */
+        }
+        #MonthSearch {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        #MonthSearch th, #MonthSearch td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        #MonthSearch th {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<h2>한양사이버대학교 최형석</h2>
+<form action="/account/insert" method="post">
+    <table>
+        <tr>
+            <td>일자</td>
+            <td><input type="date" id="targetDate" name="targetDate"></td>
+        </tr>
+        <tr>
+            <td>금액</td>
+            <td><input type="text" id="targetMoney" name="targetMoney"></td>
+        </tr>
+        <tr>
+            <td>입/출금처</td>
+            <td><input type="text" id="targetAccount" name="targetAccount"></td>
+        </tr>
+        <tr>
+            <td>적요</td>
+            <td><input type="text" id="targetText" name="targetText"></td>
+        </tr>
+    </table>
+    <button type="submit">등록</button>
+</form>
+<div class="search-section">
+    <table>
+        <tr>
+            <td>월별조회</td>
+            <td><input type="month" id="targetMonth"></td>
+            <td><button type="button" onclick="monthSearch()">조회</button></td>
+        </tr>
+    </table>
+</div>
+<table id="MonthSearch">
+</table>
+<script>
+    function monthSearch(){
+        var targetMonth = document.getElementById("targetMonth").value.replace("-", "");
+        var searchResult = "<tr><th>입/출고처</th><th>적요</th><th>등록일자</th><th>금액</th></tr>";
+        const getMonthData = new XMLHttpRequest();
+        getMonthData.open('GET', '/account/find?targetMonth=' + targetMonth, true);
+        getMonthData.send();
+        getMonthData.onreadystatechange = function() {
+            if (getMonthData.readyState == XMLHttpRequest.DONE && getMonthData.status == 200) {
+                var responseData = JSON.parse(getMonthData.responseText);
+                responseData.list.forEach(function(monthData) {
+                    searchResult += "<tr><td>" + monthData.location + "</td><td>" + monthData.note + "</td><td>" + monthData.date + "</td><td>" + monthData.amount + "</td></tr>";
+                });
+                document.getElementById("MonthSearch").innerHTML = searchResult;
+            }
+        }
+    }
+</script>
+</body>
+</html>

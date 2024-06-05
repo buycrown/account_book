@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.account_book.repository.AccountBookRepository">
+
+    <insert id="insertBook" parameterType="com.example.account_book.vo.RequestDTO">
+        INSERT INTO BOOK
+            (
+               REG_DT
+             , REG_AMT
+             , LOCATION
+             , NOTE
+            )
+        VALUES
+            (
+                #{date}
+               ,#{amount}
+               ,#{location}
+               ,#{note}
+            )
+
+    </insert>
+
+    <select id="selectBook" parameterType="java.lang.String" resultType="com.example.account_book.vo.RequestDTO">
+        SELECT REG_DT AS date, REG_AMT AS amount, LOCATION AS location, NOTE AS note
+        FROM BOOK
+        WHERE TO_CHAR(REG_DT, 'YYYYMM') = #{searchDate}
+    </select>
+
+</mapper>
