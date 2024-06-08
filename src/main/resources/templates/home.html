@@ -102,7 +102,7 @@
 <script>
     function monthSearch(){
         var targetMonth = document.getElementById("targetMonth").value.replace("-", "");
-        var searchResult = "<tr><th>입/출고처</th><th>적요</th><th>등록일자</th><th>금액</th></tr>";
+        var searchResult = "<tr><th>입/출금처</th><th>적요</th><th>등록일자</th><th>금액</th></tr>";
         const getMonthData = new XMLHttpRequest();
         getMonthData.open('GET', '/account/find?targetMonth=' + targetMonth, true);
         getMonthData.send();
